@@ -5,6 +5,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.reducer';
 import * as actions from '../auth/auth.actions';
+import * as actionsInOut from '../ingreso-egreso/ingreso-egreso.actions';
 
 import { map } from "rxjs/operators";
 import { Usuario } from '../modelos/usuario.model';
@@ -17,6 +18,11 @@ import { Subscription } from 'rxjs';
 export class AuthService {
 
   userSubcription: Subscription;
+  private _user: Usuario;
+
+  get user() {
+    return this._user;
+  }
 
   constructor(public authF: AngularFireAuth,
     private firestore: AngularFirestore,
@@ -30,13 +36,16 @@ export class AuthService {
         .subscribe( (fireUser:any) => {
 
           const user = Usuario.fromFirebase( fireUser );
+          this._user = user;
           this.store.dispatch( actions.setUser({ user }));
 
         });
       } else {
         //console.log('Llamar unset del user');
+        this._user = null;
         this.userSubcription.unsubscribe();
         this.store.dispatch( actions.unSetUser());
+        this.store.dispatch( actionsInOut.unSetItems());
 
       }
     });
@@ -70,4 +79,6 @@ export class AuthService {
       map(fbUser => fbUser != null)
     )
   }
+
+
 }
