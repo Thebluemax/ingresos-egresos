@@ -6,12 +6,18 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { dasboardRoutes } from './dashboard/dahboard.routes';
 import { AuthGuard } from './services/auth.guard';
 
+
 const routes:Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '', component: DashboardComponent,
+  {
+    path: '',
+    canLoad: [ AuthGuard ],
+      loadChildren: () => import('./ingreso-egreso/ingreso-egreso.module').then( m => m.IngresoEgresoModule)
+  },
+ /* { path: '', component: DashboardComponent,
       children: dasboardRoutes,
-    canActivate: [ AuthGuard] },
+    canActivate: [ AuthGuard] },*/
   { path: '**', redirectTo: '' },
 
 ];

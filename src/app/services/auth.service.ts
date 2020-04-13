@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 })
 export class AuthService {
 
-  userSubcription: Subscription;
+  userSubcription?: Subscription;
   private _user: Usuario;
 
   get user() {
@@ -43,7 +43,9 @@ export class AuthService {
       } else {
         //console.log('Llamar unset del user');
         this._user = null;
-        this.userSubcription.unsubscribe();
+        if (this.userSubcription) {
+          this.userSubcription.unsubscribe();
+        }
         this.store.dispatch( actions.unSetUser());
         this.store.dispatch( actionsInOut.unSetItems());
 

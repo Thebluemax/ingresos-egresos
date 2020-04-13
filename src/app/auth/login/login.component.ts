@@ -49,13 +49,6 @@ ngOnDestroy(): void {
 
     if(this.loginForm.invalid) { return; }
 
-    /*Swal.fire({
-      title: 'Comprobando Credenciales',
-      timerProgressBar: true,
-      onBeforeOpen: () => {
-        Swal.showLoading()
-      },
-    });*/
     const { nombre, correo, password} = this.loginForm.value;
 
   this.authService.loginUsuario( correo, password)
@@ -68,7 +61,6 @@ ngOnDestroy(): void {
   .catch( err => {
    // console.error(err);
    this.store.dispatch( actions.stopLoading() );
-
 
     Swal.fire({
       icon: 'error',
